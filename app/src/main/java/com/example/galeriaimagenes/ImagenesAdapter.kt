@@ -1,12 +1,18 @@
 package com.example.galeriaimagenes
 
+import android.content.Intent
 import android.view.View
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
+import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.galeriaimagenes.databinding.ItemImagenBinding
+//import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
 class ImagenesAdapter (
     private val imagenes: List<Imagen>,
@@ -14,7 +20,7 @@ class ImagenesAdapter (
 
     ):RecyclerView.Adapter<ImagenesAdapter.ViewHolder>() {
 
-        class ViewHolder (private val binding: ItemImagenBinding):
+        class ViewHolder (val binding: ItemImagenBinding):
                 RecyclerView.ViewHolder(binding.root) {
                     fun bind (imagen:Imagen) {
 
@@ -42,7 +48,30 @@ class ImagenesAdapter (
         holder.itemView.setOnClickListener{
             imgPulsadaListener.imgPulsada(imagenes[position])
         }
-    }
+
+        val imagen= imagenes[position]
+
+        holder.binding.img.setOnClickListener {
+            imagen.expandida=!imagen.expandida
+            notifyDataSetChanged()
+        }
+
+        val layoutParams=holder.binding.img.layoutParams
+
+        layoutParams.height=if(imagen.expandida) {
+            ViewGroup.LayoutParams.MATCH_PARENT
+
+        }else {
+          ViewGroup.LayoutParams.WRAP_CONTENT
+        }
+
+        holder.binding.img.layoutParams=layoutParams
+
+
+        }
+
+
+
 }
 
 
