@@ -1,60 +1,78 @@
 package com.example.galeriaimagenes
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.ScaleAnimation
-import androidx.core.view.isVisible
+import androidx.core.view.isGone
+import com.bumptech.glide.Glide
 import com.example.galeriaimagenes.databinding.ImagenesBinding
+
 import com.example.galeriaimagenes.databinding.ItemImagenBinding
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val imagen= ImagenesBinding.inflate(layoutInflater)
+        val imagenBinding = ImagenesBinding.inflate(layoutInflater)
 
-        setContentView(imagen.root)
+        setContentView(imagenBinding.root)
 
-        imagen.vistaImagenes.adapter=ImagenesAdapter (
+        var lista = mutableListOf<Imagen>()
+        val numImg = 100
 
-
-            listOf(
-                Imagen("https://loremflickr.com/320/240?random=1",false),
-                Imagen("https://loremflickr.com/320/240?random=2",false),
-                Imagen("https://loremflickr.com/320/240?random=3",false),
-                Imagen("https://loremflickr.com/320/240?random=4",false),
-                Imagen("https://loremflickr.com/320/240?random=5",false),
-                Imagen("https://loremflickr.com/320/240?random=6",false),
-                Imagen("https://loremflickr.com/320/240?random=7",false),
-                Imagen( "https://loremflickr.com/320/240?random=8",false),
-                Imagen("https://loremflickr.com/320/240?random=9",false),
-                Imagen( "https://loremflickr.com/320/240?random=11",false),
-                Imagen( "https://loremflickr.com/320/240?random=12",false),
-                Imagen( "https://loremflickr.com/320/240?random=13",false),
-                Imagen( "https://loremflickr.com/320/240?random=14",false),
-                Imagen( "https://loremflickr.com/320/240?random=15",false),
-                Imagen( "https://loremflickr.com/320/240?random=16",false),
-                Imagen( "https://loremflickr.com/320/240?random=17",false),
-                Imagen( "https://loremflickr.com/320/240?random=18",false),
-                Imagen( "https://loremflickr.com/320/240?random=19",false),
-                Imagen( "https://loremflickr.com/320/240?random=20",false),
-                Imagen( "https://loremflickr.com/320/240?random=21",false)
+        for (i in 0 until numImg) {
+            val random = (0..100).random()
+            val urlFoto = "https://loremflickr.com/320/240/horse?random=$random"
+            val img = Imagen(urlFoto)
+            lista.add(img)
 
 
-            ),
+            imagenBinding.vistaImagenes.adapter = ImagenesAdapter(
 
-            object : ImgPulsadaListener {
-                override fun imgPulsada(imagen: Imagen) {
+                lista,
 
+
+                object : ImgPulsadaListener {
+                    override fun imgPulsada(imagen: Imagen) {
+
+                        if (imagenBinding.fotoGrande.isGone) {
+                            Glide.with(imagenBinding.root.context)
+                                .load(imagen.urlFoto)
+                                .into(imagenBinding.fotoGrande)
+
+                            imagenBinding.fotoGrande.visibility = View.VISIBLE
+                            imagenBinding.linearLayout.visibility = View.GONE
+                        }
+
+
+                    }
 
                 }
+            )
 
-
-
+            imagenBinding.fotoGrande.setOnClickListener {
+                imagenBinding.fotoGrande.visibility = View.GONE
+                imagenBinding.linearLayout.visibility = View.VISIBLE
             }
-        )
+
+        }
     }
 }
+
+/*//bucle for que pone imagenes aleatorias
+for (i in 0 until numImg) {
+    val random=(0..100).random()
+    val urlFoto= "https://loremflickr.com/320/240/horse?random=$random"
+    val img =Imagen(urlFoto)
+    listaImg.add(img)
+
+     val numImg= 100
+        val listaImg= mutableListOf<Imagen>()
+
+        for (i in 0 until numImg) {
+            val random=(0 until 100).random()
+            var urlFoto="https://loremflickr.com/320/240/horse?random=$random"
+            val imagen=Imagen(urlFoto)
+        }
+*/
